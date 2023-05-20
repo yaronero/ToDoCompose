@@ -16,27 +16,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.example.todocompose.R
+import com.example.todocompose.data.models.ToDoTask
 import com.example.todocompose.ui.theme.fabBackgroundColor
-import com.example.todocompose.ui.viewmodels.SharedViewModel
+import com.example.todocompose.ui.viewmodels.TaskListViewModel
 import com.example.todocompose.util.SearchAppBarState
 
 @Composable
 fun ListScreen(
     navigateToTaskScreen: (taskId: Int) -> Unit,
-    sharedViewModel: SharedViewModel
+    taskListViewModel: TaskListViewModel
 ) {
     LaunchedEffect(key1 = true) {
-        sharedViewModel.getAllTasks()
+        taskListViewModel.getAllTasks()
     }
 
-    val allTasks by sharedViewModel.allTasks.collectAsState()
-    val searchAppBarState: SearchAppBarState by sharedViewModel.searchAppBarState
-    val searchTextState: String by sharedViewModel.searchTextState
+    val allTasks by taskListViewModel.allTasks.collectAsState()
+    val searchAppBarState: SearchAppBarState by taskListViewModel.searchAppBarState
+    val searchTextState: String by taskListViewModel.searchTextState
 
     Scaffold(
         topBar = {
             ListAppBar(
-                sharedViewModel = sharedViewModel,
+                taskListViewModel = taskListViewModel,
                 searchAppBarState = searchAppBarState,
                 searchTextState = searchTextState
             )
@@ -59,7 +60,7 @@ fun ListFAB(
 ) {
     FloatingActionButton(
         onClick = {
-            onFabClicked(-1)
+            onFabClicked(ToDoTask.UNDEFINED_ID)
         },
         backgroundColor = MaterialTheme.colors.fabBackgroundColor
     ) {

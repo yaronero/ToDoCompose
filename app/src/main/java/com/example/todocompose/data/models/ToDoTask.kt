@@ -5,4 +5,8 @@ data class ToDoTask(
     val title: String,
     val description: String,
     val priority: Priority
-)
+) {
+    companion object {
+        const val UNDEFINED_ID = -1
+    }
+}

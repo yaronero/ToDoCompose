@@ -41,14 +41,14 @@ import com.example.todocompose.ui.theme.ToDoComposeTheme
 import com.example.todocompose.ui.theme.Typography
 import com.example.todocompose.ui.theme.topAppBarBackgroundColor
 import com.example.todocompose.ui.theme.topAppBarContentColor
-import com.example.todocompose.ui.viewmodels.SharedViewModel
+import com.example.todocompose.ui.viewmodels.TaskListViewModel
 import com.example.todocompose.util.LARGE_PADDING
 import com.example.todocompose.util.SearchAppBarState
 import com.example.todocompose.util.TOP_APP_BAR_HEIGHT
 
 @Composable
 fun ListAppBar(
-    sharedViewModel: SharedViewModel,
+    taskListViewModel: TaskListViewModel,
     searchAppBarState: SearchAppBarState,
     searchTextState: String
 ) {
@@ -56,7 +56,7 @@ fun ListAppBar(
         SearchAppBarState.CLOSED -> {
             DefaultListAppBar(
                 onSearchClicked = {
-                    sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED
+                    taskListViewModel.searchAppBarState.value = SearchAppBarState.OPENED
                 },
                 onSortClicked = {},
                 onDeleteClicked = {}
@@ -67,11 +67,11 @@ fun ListAppBar(
             SearchAppBar(
                 text = searchTextState,
                 onTextChange = { newText ->
-                    sharedViewModel.searchTextState.value = newText
+                    taskListViewModel.searchTextState.value = newText
                 },
                 onCloseClicked = {
-                    sharedViewModel.searchAppBarState.value = SearchAppBarState.CLOSED
-                    sharedViewModel.searchTextState.value = ""
+                    taskListViewModel.searchAppBarState.value = SearchAppBarState.CLOSED
+                    taskListViewModel.searchTextState.value = ""
                 },
                 onSearchClicked = {}
             )
