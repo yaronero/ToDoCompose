@@ -19,4 +19,5 @@
     <string name="search_placeholder">Search</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
+    <string name="fields_empty">Fields empty</string>
 </resources>

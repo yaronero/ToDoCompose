@@ -15,16 +15,14 @@ import androidx.navigation.compose.rememberNavController
 import com.example.todocompose.navigation.SetupNavigation
 import com.example.todocompose.ui.theme.ToDoComposeTheme
 import com.example.todocompose.ui.theme.topAppBarBackgroundColor
-import com.example.todocompose.ui.viewmodels.TaskListViewModel
-import com.example.todocompose.ui.viewmodels.TaskViewModel
+import com.example.todocompose.ui.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     
     private lateinit var navController: NavHostController
-    private val taskListViewModel: TaskListViewModel by viewModels()
-    private val taskViewModel: TaskViewModel by viewModels()
+    private val sharedViewModel: SharedViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,8 +39,7 @@ class MainActivity : ComponentActivity() {
                     ) { }
                     SetupNavigation(
                         navController = navController,
-                        taskListViewModel = taskListViewModel,
-                        taskViewModel = taskViewModel
+                        sharedViewModel = sharedViewModel
                     )
                 }
             }
