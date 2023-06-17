@@ -26,7 +26,7 @@ class SharedViewModel @Inject constructor(
 
     val action: MutableState<Action> = mutableStateOf(Action.NO_ACTION)
 
-    val id: MutableState<Int> = mutableStateOf(-1)
+    val id: MutableState<Int> = mutableStateOf(ToDoTask.UNDEFINED_ID)
     val title: MutableState<String> = mutableStateOf("")
     val description: MutableState<String> = mutableStateOf("")
     val priority: MutableState<Priority> = mutableStateOf(Priority.LOW)
@@ -38,8 +38,25 @@ class SharedViewModel @Inject constructor(
         mutableStateOf(SearchAppBarState.CLOSED)
     val searchTextState: MutableState<String> = mutableStateOf("")
 
+    private val _searchedTasks = MutableStateFlow<RequestState<List<ToDoTask>>>(RequestState.Idle)
+    val searchedTasks: StateFlow<RequestState<List<ToDoTask>>> = _searchedTasks.asStateFlow()
+
     private val _allTasks = MutableStateFlow<RequestState<List<ToDoTask>>>(RequestState.Idle)
     val allTasks: StateFlow<RequestState<List<ToDoTask>>> = _allTasks.asStateFlow()
+
+    fun searchDatabase(query: String) {
+        _searchedTasks.value = RequestState.Loading
+        try {
+            viewModelScope.launch {
+                repository.searchDatabase(query).collect { searchedTasks ->
+                    _searchedTasks.value = RequestState.Success(searchedTasks)
+                }
+            }
+        } catch (e: Exception) {
+            _searchedTasks.value = RequestState.Error(e)
+        }
+        searchAppBarState.value = SearchAppBarState.TRIGGERED
+    }
 
     fun getAllTasks() {
         _allTasks.value = RequestState.Loading
@@ -82,7 +99,7 @@ class SharedViewModel @Inject constructor(
             description.value = selectedTask.description
             priority.value = selectedTask.priority
         } else {
-            id.value = -1
+            id.value = ToDoTask.UNDEFINED_ID
             title.value = ""
             description.value = ""
             priority.value = Priority.LOW
@@ -91,11 +108,14 @@ class SharedViewModel @Inject constructor(
 
     fun handleDatabaseActions(action: Action) {
         when (action) {
-            Action.ADD -> addToDoTask()
+            Action.ADD -> {
+                addToDoTask()
+                clearAndCloseAppBar()
+            }
             Action.UPDATE -> updateToDoTask()
             Action.DELETE -> deleteToDoTask()
             Action.DELETE_ALL -> {}
-            Action.UNDO -> {}
+            Action.UNDO -> addToDoTask()
             else -> {}
         }
         this.action.value = Action.NO_ACTION
@@ -104,7 +124,7 @@ class SharedViewModel @Inject constructor(
     private fun addToDoTask() {
         viewModelScope.launch(Dispatchers.IO) {
             val toDoTask = ToDoTask(
-                id = id.value,
+                id = 0,
                 title = title.value,
                 priority = priority.value,
                 description = description.value
@@ -145,4 +165,9 @@ class SharedViewModel @Inject constructor(
     }
 
     fun validateFields(): Boolean = title.value.isNotBlank() && description.value.isNotBlank()
+
+    fun clearAndCloseAppBar() {
+        searchAppBarState.value = SearchAppBarState.CLOSED
+        searchTextState.value = ""
+    }
 }
