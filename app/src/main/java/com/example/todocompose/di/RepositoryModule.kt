@@ -1,5 +1,7 @@
 package com.example.todocompose.di
 
+import com.example.todocompose.data.repositories.DataStoreRepository
+import com.example.todocompose.data.repositories.DataStoreRepositoryImpl
 import com.example.todocompose.data.repositories.ToDoRepository
 import com.example.todocompose.data.repositories.ToDoRepositoryImpl
 import dagger.Binds
@@ -15,4 +17,8 @@ interface RepositoryModule {
     @Singleton
     @Binds
     fun bindToDoRepository(repositoryImpl: ToDoRepositoryImpl): ToDoRepository
+
+    @Singleton
+    @Binds
+    fun bindDataStoreRepository(repositoryImpl: DataStoreRepositoryImpl): DataStoreRepository
 }
