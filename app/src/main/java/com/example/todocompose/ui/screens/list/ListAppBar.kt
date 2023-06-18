@@ -35,6 +35,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.todocompose.R
+import com.example.todocompose.components.DisplayAlertDialog
 import com.example.todocompose.components.PriorityItem
 import com.example.todocompose.data.models.Priority
 import com.example.todocompose.ui.theme.ToDoComposeTheme
@@ -42,6 +43,7 @@ import com.example.todocompose.ui.theme.Typography
 import com.example.todocompose.ui.theme.topAppBarBackgroundColor
 import com.example.todocompose.ui.theme.topAppBarContentColor
 import com.example.todocompose.ui.viewmodels.SharedViewModel
+import com.example.todocompose.util.Action
 import com.example.todocompose.util.LARGE_PADDING
 import com.example.todocompose.util.SearchAppBarState
 import com.example.todocompose.util.TOP_APP_BAR_HEIGHT
@@ -59,7 +61,9 @@ fun ListAppBar(
                     sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED
                 },
                 onSortClicked = {},
-                onDeleteClicked = {}
+                onDeleteAllConfirmed = {
+                    sharedViewModel.action.value = Action.DELETE_ALL
+                }
             )
         }
 
@@ -78,20 +82,18 @@ fun ListAppBar(
             )
         }
     }
-
-
 }
 
 @Composable
 fun DefaultListAppBar(
     onSearchClicked: () -> Unit,
     onSortClicked: (Priority) -> Unit,
-    onDeleteClicked: () -> Unit
+    onDeleteAllConfirmed: () -> Unit
 ) {
     TopAppBar(
         title = {
             Text(
-                text = "Tasks",
+                text = stringResource(id = R.string.tasks),
                 color = MaterialTheme.colors.topAppBarContentColor
             )
         },
@@ -99,7 +101,7 @@ fun DefaultListAppBar(
             ListAppBarActions(
                 onSearchClicked,
                 onSortClicked,
-                onDeleteClicked
+                onDeleteAllConfirmed
             )
         },
         backgroundColor = MaterialTheme.colors.topAppBarBackgroundColor
@@ -110,11 +112,26 @@ fun DefaultListAppBar(
 fun ListAppBarActions(
     onSearchClicked: () -> Unit,
     onSortClicked: (Priority) -> Unit,
-    onDeleteClicked: () -> Unit
+    onDeleteAllConfirmed: () -> Unit
 ) {
+    var openDialog by remember {
+        mutableStateOf(false)
+    }
+
+    DisplayAlertDialog(
+        title = stringResource(id = R.string.deleted_all_tasks),
+        message = stringResource(id = R.string.delete_all_tasks_confirmation),
+        openDialog = openDialog,
+        closeDialog = { openDialog = false },
+        onYesClicked = {
+            onDeleteAllConfirmed()
+        }
+    )
     SearchAction(onSearchClicked = onSearchClicked)
     SortAction(onSortClicked = onSortClicked)
-    DeleteAllAction(onDeleteClicked = onDeleteClicked)
+    DeleteAllAction(onDeleteAllClicked = {
+        openDialog = true
+    })
 }
 
 @Composable
@@ -180,7 +197,7 @@ fun SortAction(
 
 @Composable
 fun DeleteAllAction(
-    onDeleteClicked: () -> Unit
+    onDeleteAllClicked: () -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -199,7 +216,7 @@ fun DeleteAllAction(
             DropdownMenuItem(
                 onClick = {
                     expanded = false
-                    onDeleteClicked()
+                    onDeleteAllClicked()
                 }
             ) {
                 Text(
@@ -303,7 +320,7 @@ private fun DefaultListAppBarPreview() {
         DefaultListAppBar(
             onSearchClicked = {},
             onSortClicked = {},
-            onDeleteClicked = {}
+            onDeleteAllConfirmed = {}
         )
     }
 }

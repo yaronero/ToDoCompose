@@ -1,7 +1,6 @@
 package com.example.todocompose.ui.screens.list
 
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,7 +36,6 @@ fun ListContent(
     searchAppBarState: SearchAppBarState,
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
-    Log.d("TAG", searchAppBarState.toString())
     if (searchAppBarState == SearchAppBarState.TRIGGERED) {
         if (searchedTasks is RequestState.Success) {
             HandleListContent(
