@@ -26,22 +26,69 @@ import com.example.todocompose.ui.theme.taskItemBackgroundColor
 import com.example.todocompose.ui.theme.taskItemTextColor
 import com.example.todocompose.util.LARGE_PADDING
 import com.example.todocompose.util.RequestState
+import com.example.todocompose.util.SearchAppBarState
 import com.example.todocompose.util.TASK_ITEM_ELEVATION
 
 @Composable
 fun ListContent(
-    tasks: RequestState<List<ToDoTask>>,
+    allTasks: RequestState<List<ToDoTask>>,
+    searchedTasks: RequestState<List<ToDoTask>>,
+    lowPriorityTasks: RequestState<List<ToDoTask>>,
+    highPriorityTasks: RequestState<List<ToDoTask>>,
+    sortState: RequestState<Priority>,
+    searchAppBarState: SearchAppBarState,
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
-    if(tasks is RequestState.Success) {
-        if (tasks.data.isEmpty()) {
-            EmptyContent()
-        } else {
-            DisplayContent(
-                tasks.data,
-                navigateToTaskScreen
-            )
+    if(sortState is RequestState.Success) {
+        when {
+            searchAppBarState == SearchAppBarState.TRIGGERED -> {
+                if (searchedTasks is RequestState.Success) {
+                    HandleListContent(
+                        tasks = searchedTasks.data,
+                        navigateToTaskScreen = navigateToTaskScreen
+                    )
+                }
+            }
+            sortState.data == Priority.NONE -> {
+                if (allTasks is RequestState.Success) {
+                    HandleListContent(
+                        tasks = allTasks.data,
+                        navigateToTaskScreen = navigateToTaskScreen
+                    )
+                }
+            }
+            sortState.data == Priority.LOW -> {
+                if (lowPriorityTasks is RequestState.Success) {
+                    HandleListContent(
+                        tasks = lowPriorityTasks.data,
+                        navigateToTaskScreen = navigateToTaskScreen
+                    )
+                }
+            }
+            sortState.data == Priority.HIGH -> {
+                if (highPriorityTasks is RequestState.Success) {
+                    HandleListContent(
+                        tasks = highPriorityTasks.data,
+                        navigateToTaskScreen = navigateToTaskScreen
+                    )
+                }
+            }
         }
+    }
+}
+
+@Composable
+fun HandleListContent(
+    tasks: List<ToDoTask>,
+    navigateToTaskScreen: (taskId: Int) -> Unit
+) {
+    if (tasks.isEmpty()) {
+        EmptyContent()
+    } else {
+        DisplayContent(
+            tasks = tasks,
+            navigateToTaskScreen = navigateToTaskScreen
+        )
     }
 }
 
