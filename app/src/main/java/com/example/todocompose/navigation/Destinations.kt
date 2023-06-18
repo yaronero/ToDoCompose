@@ -9,13 +9,26 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.todocompose.navigation.Screens.Companion.LIST_ARGUMENT_KEY
 import com.example.todocompose.navigation.Screens.Companion.LIST_SCREEN
+import com.example.todocompose.navigation.Screens.Companion.SPLASH_SCREEN
 import com.example.todocompose.navigation.Screens.Companion.TASK_ARGUMENT_KEY
 import com.example.todocompose.navigation.Screens.Companion.TASK_SCREEN
 import com.example.todocompose.ui.screens.list.ListScreen
+import com.example.todocompose.ui.screens.splash.SplashScreen
 import com.example.todocompose.ui.screens.task.TaskScreen
 import com.example.todocompose.ui.viewmodels.SharedViewModel
 import com.example.todocompose.util.Action
+import com.example.todocompose.util.RequestState
 import com.example.todocompose.util.toAction
+
+fun NavGraphBuilder.splashComposable(
+    navigateToListScreen: () -> Unit
+) {
+    composable(
+        route = SPLASH_SCREEN
+    ) {
+        SplashScreen(navigateToListScreen)
+    }
+}
 
 fun NavGraphBuilder.listComposable(
     navigateToTaskScreen: (taskId: Int) -> Unit,
@@ -55,6 +68,11 @@ fun NavGraphBuilder.taskComposable(
 
         LaunchedEffect(key1 = Unit) {
             sharedViewModel.getSelectedTask(taskId)
+            selectedTask.let {
+                if (it is RequestState.Success) {
+                    sharedViewModel.updateTaskFields(it.data)
+                }
+            }
         }
 
         TaskScreen(

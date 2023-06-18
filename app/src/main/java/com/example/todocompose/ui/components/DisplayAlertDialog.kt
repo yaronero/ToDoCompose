@@ -1,4 +1,4 @@
-package com.example.todocompose.components
+package com.example.todocompose.ui.components
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.material.AlertDialog

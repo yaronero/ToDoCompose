@@ -17,14 +17,17 @@ fun SetupNavigation(
 
     NavHost(
         navController = navController,
-        startDestination = Screens.LIST_SCREEN
+        startDestination = Screens.SPLASH_SCREEN
     ) {
+        splashComposable(
+            navigateToListScreen = screen.splash
+        )
         listComposable(
-            navigateToTaskScreen = screen.task,
+            navigateToTaskScreen = screen.list,
             sharedViewModel = sharedViewModel
         )
         taskComposable(
-            navigateToListScreen = screen.list,
+            navigateToListScreen = screen.task,
             sharedViewModel = sharedViewModel
         )
     }
