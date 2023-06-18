@@ -73,13 +73,17 @@ fun ListScreen(
             modifier = Modifier.padding(paddingValues)
         ) {
             ListContent(
-                allTasks,
-                searchedTasks,
-                lowPriorityTasks,
-                highPriorityTasks,
-                sortState,
-                searchAppBarState,
-                navigateToTaskScreen
+                allTasks = allTasks,
+                searchedTasks = searchedTasks,
+                lowPriorityTasks = lowPriorityTasks,
+                highPriorityTasks = highPriorityTasks,
+                sortState = sortState,
+                searchAppBarState = searchAppBarState,
+                onSwipeToDelete = { action, task ->
+                    sharedViewModel.action.value = action
+                    sharedViewModel.updateTaskFields(task)
+                },
+                navigateToTaskScreen = navigateToTaskScreen
             )
         }
     }
@@ -132,14 +136,14 @@ fun DisplaySnackBar(
 }
 
 private fun setMessage(action: Action, taskTitle: String): String {
-    return when(action) {
+    return when (action) {
         Action.DELETE_ALL -> "All task removed."
         else -> "${action.name}: $taskTitle"
     }
 }
 
 private fun setActionLabel(action: Action): String {
-    return if(action == Action.DELETE) {
+    return if (action == Action.DELETE) {
         "UNDO"
     } else {
         "OK"
@@ -151,7 +155,7 @@ private fun undoDeletedTask(
     snackBarResult: SnackbarResult,
     onUndoClicked: (Action) -> Unit
 ) {
-    if(snackBarResult == SnackbarResult.ActionPerformed && action == Action.DELETE) {
+    if (snackBarResult == SnackbarResult.ActionPerformed && action == Action.DELETE) {
         onUndoClicked(Action.UNDO)
     }
 }

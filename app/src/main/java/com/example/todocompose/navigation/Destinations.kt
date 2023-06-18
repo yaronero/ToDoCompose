@@ -15,6 +15,7 @@ import com.example.todocompose.ui.screens.list.ListScreen
 import com.example.todocompose.ui.screens.task.TaskScreen
 import com.example.todocompose.ui.viewmodels.SharedViewModel
 import com.example.todocompose.util.Action
+import com.example.todocompose.util.RequestState
 import com.example.todocompose.util.toAction
 
 fun NavGraphBuilder.listComposable(
@@ -55,6 +56,11 @@ fun NavGraphBuilder.taskComposable(
 
         LaunchedEffect(key1 = Unit) {
             sharedViewModel.getSelectedTask(taskId)
+            selectedTask.let {
+                if (it is RequestState.Success) {
+                    sharedViewModel.updateTaskFields(it.data)
+                }
+            }
         }
 
         TaskScreen(

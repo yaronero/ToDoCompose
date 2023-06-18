@@ -20,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.todocompose.R
-import com.example.todocompose.components.DisplayAlertDialog
+import com.example.todocompose.ui.components.DisplayAlertDialog
 import com.example.todocompose.ui.theme.ToDoComposeTheme
 import com.example.todocompose.ui.theme.topAppBarBackgroundColor
 import com.example.todocompose.ui.theme.topAppBarContentColor

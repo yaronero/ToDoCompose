@@ -134,7 +134,6 @@ class SharedViewModel @Inject constructor(
                     toDoRepository.getSelectedTask(taskId).collect { toDoTask ->
                         toDoTask?.let {
                             _selectedTask.value = RequestState.Success(it)
-                            updateTaskFields(it)
                         }
                     }
                 }
@@ -144,7 +143,7 @@ class SharedViewModel @Inject constructor(
         }
     }
 
-    private fun updateTaskFields(selectedTask: ToDoTask?) {
+    fun updateTaskFields(selectedTask: ToDoTask?) {
         if (selectedTask != null) {
             id.value = selectedTask.id
             title.value = selectedTask.title

@@ -35,8 +35,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.todocompose.R
-import com.example.todocompose.components.DisplayAlertDialog
-import com.example.todocompose.components.PriorityItem
+import com.example.todocompose.ui.components.DisplayAlertDialog
+import com.example.todocompose.ui.components.PriorityItem
 import com.example.todocompose.data.models.Priority
 import com.example.todocompose.ui.theme.ToDoComposeTheme
 import com.example.todocompose.ui.theme.Typography
