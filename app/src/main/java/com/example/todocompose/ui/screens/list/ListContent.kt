@@ -49,6 +49,7 @@ import com.example.todocompose.data.models.Priority
 import com.example.todocompose.data.models.ToDoTask
 import com.example.todocompose.ui.components.PriorityIndicatorCircle
 import com.example.todocompose.ui.theme.HighPriorityColor
+import com.example.todocompose.ui.theme.ToDoComposeTheme
 import com.example.todocompose.ui.theme.taskItemBackgroundColor
 import com.example.todocompose.ui.theme.taskItemTextColor
 import com.example.todocompose.util.Action
@@ -275,15 +276,17 @@ fun TaskItem(
     uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 fun TaskItemPreview() {
-    TaskItem(
-        toDoTask = ToDoTask(
-            1,
-            "Title",
-            "Lorem ipsum dolor sit amet, consectetur adipiscing edlit, sed do eiusmod tempor labore fractionale de gusto merinjo",
-            Priority.LOW
-        ),
-        navigateToTaskScreen = {}
-    )
+    ToDoComposeTheme {
+        TaskItem(
+            toDoTask = ToDoTask(
+                1,
+                "Title",
+                "Lorem ipsum dolor sit amet, consectetur adipiscing edlit, sed do eiusmod tempor labore fractionale de gusto merinjo",
+                Priority.LOW
+            ),
+            navigateToTaskScreen = {}
+        )
+    }
 }
 
 @Composable
