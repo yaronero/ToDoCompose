@@ -1,3 +1,30 @@
 <resources>
     <string name="app_name">ToDoCompose</string>
+
+    <string name="add_button">Add button</string>
+    <string name="search_action">Search tasks</string>
+    <string name="sort_action">Sort tasks</string>
+    <string name="delete_all_action">Delete all</string>
+
+    <string name="search_icon">Search icon</string>
+    <string name="close_icon">Close icon</string>
+    <string name="delete_icon">Delete icon</string>
+    <string name="update_icon">Update icon</string>
+    <string name="back_arrow">Back arrow</string>
+    <string name="drop_down_arrow">Drop down arrow</string>
+
+    <string name="add_task">Add task</string>
+    <string name="sad_face">Sad face icon</string>
+    <string name="empty_content">No tasks found</string>
+    <string name="search_placeholder">Search</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="fields_empty">Fields empty</string>
+    <string name="tasks">Tasks</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="deleted_task">Remove \'%s\'?</string>
+    <string name="delete_task_confirmation">Are you sure you want to remove \'%s\'?</string>
+    <string name="deleted_all_tasks">Remove All Tasks?</string>
+    <string name="delete_all_tasks_confirmation">Are you sure you want to remove all tasks? There is no going back after this action.</string>
 </resources>
