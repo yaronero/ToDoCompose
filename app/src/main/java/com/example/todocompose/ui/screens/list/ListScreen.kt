@@ -24,15 +24,18 @@ import com.example.todocompose.data.models.ToDoTask
 import com.example.todocompose.ui.theme.fabBackgroundColor
 import com.example.todocompose.ui.viewmodels.SharedViewModel
 import com.example.todocompose.util.Action
-import com.example.todocompose.util.SearchAppBarState
 import kotlinx.coroutines.launch
 
 @Composable
 fun ListScreen(
+    action: Action,
     navigateToTaskScreen: (taskId: Int) -> Unit,
     sharedViewModel: SharedViewModel
 ) {
-    val action by sharedViewModel.action
+    LaunchedEffect(key1 = action) {
+        sharedViewModel.handleDatabaseActions(action)
+    }
+
 
     val allTasks by sharedViewModel.allTasks.collectAsState()
     val searchedTasks by sharedViewModel.searchedTasks.collectAsState()
@@ -41,18 +44,18 @@ fun ListScreen(
 
     val sortState by sharedViewModel.sortState.collectAsState()
 
-    val searchAppBarState: SearchAppBarState by sharedViewModel.searchAppBarState
-    val searchTextState: String by sharedViewModel.searchTextState
+    val searchAppBarState = sharedViewModel.searchAppBarState
+    val searchTextState = sharedViewModel.searchTextState
 
     val scaffoldState = rememberScaffoldState()
 
     DisplaySnackBar(
         scaffoldState = scaffoldState,
-        handleDatabaseActions = { sharedViewModel.handleDatabaseActions(action) },
+        onComplete = { sharedViewModel.updateAction(it) },
         onUndoClicked = {
-            sharedViewModel.action.value = it
+            sharedViewModel.updateAction(it)
         },
-        taskTitle = sharedViewModel.title.value,
+        taskTitle = sharedViewModel.title,
         action = action
     )
 
@@ -80,8 +83,9 @@ fun ListScreen(
                 sortState = sortState,
                 searchAppBarState = searchAppBarState,
                 onSwipeToDelete = { action, task ->
-                    sharedViewModel.action.value = action
+                    sharedViewModel.updateAction(action)
                     sharedViewModel.updateTaskFields(task)
+                    scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
                 },
                 navigateToTaskScreen = navigateToTaskScreen
             )
@@ -110,13 +114,11 @@ fun ListFAB(
 @Composable
 fun DisplaySnackBar(
     scaffoldState: ScaffoldState,
-    handleDatabaseActions: () -> Unit,
+    onComplete: (Action) -> Unit,
     onUndoClicked: (Action) -> Unit,
     taskTitle: String,
     action: Action
 ) {
-    handleDatabaseActions()
-
     val scope = rememberCoroutineScope()
     LaunchedEffect(key1 = action) {
         if (action != Action.NO_ACTION && action != Action.UNDO) {
@@ -131,6 +133,7 @@ fun DisplaySnackBar(
                     onUndoClicked
                 )
             }
+            onComplete(Action.NO_ACTION)
         }
     }
 }

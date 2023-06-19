@@ -1,10 +1,10 @@
 package com.example.todocompose.ui.screens.task
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.example.todocompose.R
@@ -20,12 +20,16 @@ fun TaskScreen(
     sharedViewModel: SharedViewModel,
     navigateToListScreen: (Action) -> Unit
 ) {
-    val title by sharedViewModel.title
-    val description by sharedViewModel.description
-    val priority by sharedViewModel.priority
+
+    val title = sharedViewModel.title
+    val description = sharedViewModel.description
+    val priority = sharedViewModel.priority
 
     val context = LocalContext.current
 
+    BackHandler {
+        navigateToListScreen(Action.NO_ACTION)
+    }
     if(selectedTask is RequestState.Success) {
         Scaffold(
             topBar = {
@@ -50,9 +54,9 @@ fun TaskScreen(
                     title = title,
                     onTitleChange = { sharedViewModel.updateTitle(it) },
                     description = description,
-                    onDescriptionChange = { sharedViewModel.description.value = it },
+                    onDescriptionChange = { sharedViewModel.updateDescription(it) },
                     priority = priority,
-                    onPrioritySelected = { sharedViewModel.priority.value = it }
+                    onPrioritySelected = { sharedViewModel.updatePriority(it) }
                 )
             }
         }

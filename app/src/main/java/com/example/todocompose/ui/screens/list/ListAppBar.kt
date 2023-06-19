@@ -58,13 +58,13 @@ fun ListAppBar(
         SearchAppBarState.CLOSED -> {
             DefaultListAppBar(
                 onSearchClicked = {
-                    sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED
+                    sharedViewModel.updateAppBarState(SearchAppBarState.OPENED)
                 },
                 onSortClicked = { priority ->
                     sharedViewModel.persistSortState(priority)
                 },
                 onDeleteAllConfirmed = {
-                    sharedViewModel.action.value = Action.DELETE_ALL
+                    sharedViewModel.updateAction(Action.DELETE_ALL)
                 }
             )
         }
@@ -73,7 +73,7 @@ fun ListAppBar(
             SearchAppBar(
                 text = searchTextState,
                 onTextChange = { newText ->
-                    sharedViewModel.searchTextState.value = newText
+                    sharedViewModel.updateSearchText(newText)
                 },
                 onCloseClicked = {
                     sharedViewModel.clearAndCloseAppBar()
@@ -169,29 +169,15 @@ fun SortAction(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            DropdownMenuItem(
-                onClick = {
-                    expanded = false
-                    onSortClicked(Priority.LOW)
+            Priority.values().slice(setOf(0, 2, 3)).forEach { priority ->
+                DropdownMenuItem(
+                    onClick = {
+                        expanded = false
+                        onSortClicked(priority)
+                    }
+                ) {
+                    PriorityItem(priority = priority)
                 }
-            ) {
-                PriorityItem(priority = Priority.LOW)
-            }
-            DropdownMenuItem(
-                onClick = {
-                    expanded = false
-                    onSortClicked(Priority.HIGH)
-                }
-            ) {
-                PriorityItem(priority = Priority.HIGH)
-            }
-            DropdownMenuItem(
-                onClick = {
-                    expanded = false
-                    onSortClicked(Priority.NONE)
-                }
-            ) {
-                PriorityItem(priority = Priority.NONE)
             }
         }
     }
