@@ -25,6 +25,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.todocompose.R
 import com.example.todocompose.ui.theme.ToDoComposeTheme
@@ -60,6 +61,15 @@ fun SplashScreen(
         navigateToListScreen()
     }
 
+
+    Splash(offsetState, alphaState)
+}
+
+@Composable
+fun Splash(
+    offsetState: Dp,
+    alphaState: Float
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -99,6 +109,6 @@ fun SplashScreen(
 )
 fun TaskItemPreview() {
     ToDoComposeTheme {
-        SplashScreen {}
+        Splash(offsetState = 0.dp, alphaState = 1f)
     }
 }
